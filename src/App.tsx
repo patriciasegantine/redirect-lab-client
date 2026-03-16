@@ -1,19 +1,22 @@
-import { Button } from "@/components/ui/button"
+import { Header } from "@/components/header"
+import { Layout } from "@/components/layout"
+import { Home } from "@/components/pages/home"
+import { NotFound } from "@/components/pages/not-found"
+import { Redirecting } from "@/components/pages/redirecting"
+import { Route, Routes } from "react-router-dom"
 
 export function App() {
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Header />
+      
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/test-redirect" element={<Redirecting />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Layout>
     </div>
   )
 }
