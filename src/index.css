@@ -8,6 +8,7 @@
     /* Design System - Blue */
     --blue-base: #2C46B1;
     --blue-dark: #2C4091;
+    --blue-light: #5b72a2;
 
     /* Design System - Grayscale */
     --white: #FFFFFF;
@@ -23,7 +24,7 @@
 
     /* Light Theme */
     --background: var(--gray-200);
-    --foreground: var(--gray-600);
+    --foreground: var(--gray-500);
 
     --card: var(--white);
     --card-foreground: var(--gray-600);
@@ -79,7 +80,7 @@
     --popover: var(--gray-500);
     --popover-foreground: var(--gray-100);
 
-    --primary: var(--blue-base);
+    --primary: var(--blue-light);
     --primary-foreground: var(--white);
 
     --secondary: var(--gray-500);
@@ -110,10 +111,12 @@
 
 @theme inline {
     --font-sans: 'Open Sans Variable', sans-serif;
+    --text-xs: 0.625rem;
 
     /* Design System Colors */
     --color-blue-base: var(--blue-base);
     --color-blue-dark: var(--blue-dark);
+    --color-blue-light: var(--blue-light);
     --color-white: var(--white);
     --color-gray-100: var(--gray-100);
     --color-gray-200: var(--gray-200);
