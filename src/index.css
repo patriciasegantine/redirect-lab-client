@@ -112,6 +112,10 @@
 @theme inline {
     --font-sans: 'Open Sans Variable', sans-serif;
     --text-xs: 0.625rem;
+    --text-sm: 0.750rem;
+    --text-md: 0.875rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.5rem;
 
     /* Design System Colors */
     --color-blue-base: var(--blue-base);

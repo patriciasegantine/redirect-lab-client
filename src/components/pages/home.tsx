@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
 import { CreateLink } from "@/components/create-link";
-import { LinksList } from "@/components/links-list";
+import { MyLinks } from "@/components/my-links.tsx";
 
 export function Home() {
   const navigate = useNavigate()
@@ -14,7 +14,7 @@ export function Home() {
         </div>
         
         <div className="w-full lg:flex-1">
-          <LinksList />
+          <MyLinks />
         </div>
       </div>
       
