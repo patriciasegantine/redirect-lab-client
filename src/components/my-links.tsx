@@ -2,9 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { EmptyList } from "@/components/empty-list.tsx";
 import { Download } from "@phosphor-icons/react";
+import { LinksList } from "@/components/links-list.tsx";
 
 export function MyLinks() {
-  const hasLinks = false
+  const hasLinks = true
   
   return (
     <Card className="w-full">
@@ -24,7 +25,7 @@ export function MyLinks() {
         {
           !hasLinks
           ? <EmptyList />
-          : <div>List</div>
+          : <LinksList/>
         }
       </CardContent>
     </Card>
