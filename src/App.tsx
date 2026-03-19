@@ -3,7 +3,7 @@ import { Layout } from "@/components/layout"
 import { Home } from "@/components/pages/home"
 import { NotFound } from "@/components/pages/not-found"
 import { Redirecting } from "@/components/pages/redirecting"
-import { AppRoutes } from "@/lib/routes"
+import { AppRoutes } from "@/enum/routes"
 import { Route, Routes } from "react-router-dom"
 
 export function App() {

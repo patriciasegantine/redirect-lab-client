@@ -1,4 +1,4 @@
-import { fetchLinks } from "@/lib/links-service";
+import { fetchLinks } from "@/services/links-service";
 import { useQuery } from "@tanstack/react-query";
 
 export function useLinks() {
