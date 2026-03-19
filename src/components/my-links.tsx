@@ -4,6 +4,7 @@ import { EmptyList } from "@/components/empty-list.tsx";
 import { Download } from "@phosphor-icons/react";
 import { LinksList } from "@/components/links-list.tsx";
 import { useLinks } from "@/hooks/use-links";
+import { LoadingState } from "@/components/loading-state.tsx";
 
 export function MyLinks() {
   const { links, isLoading, error } = useLinks();
@@ -25,9 +26,7 @@ export function MyLinks() {
       
       <CardContent className="h-full">
         {isLoading ? (
-          <p className="py-4 text-center text-sm text-muted-foreground">
-            Loading...
-          </p>
+          <LoadingState />
         ) : error ? (
           <p className="py-4 text-center text-sm text-destructive">{error}</p>
         ) : !hasLinks ? (
