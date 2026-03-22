@@ -2,9 +2,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { EmptyList } from "@/components/empty-list.tsx";
 import { Download } from "@phosphor-icons/react";
+import { LinksList } from "@/components/links-list.tsx";
+import { useLinks } from "@/hooks/use-links";
+import { LoadingState } from "@/components/loading-state.tsx";
 
 export function MyLinks() {
-  const hasLinks = false
+  const { links, isLoading, error } = useLinks();
+  const hasLinks = links.length > 0;
   
   return (
     <Card className="w-full">
@@ -21,11 +25,15 @@ export function MyLinks() {
       </CardHeader>
       
       <CardContent className="h-full">
-        {
-          !hasLinks
-          ? <EmptyList />
-          : <div>List</div>
-        }
+        {isLoading ? (
+          <LoadingState />
+        ) : error ? (
+          <p className="py-4 text-center text-sm text-destructive">{error}</p>
+        ) : !hasLinks ? (
+          <EmptyList />
+        ) : (
+          <LinksList links={links} />
+        )}
       </CardContent>
     </Card>
   )
