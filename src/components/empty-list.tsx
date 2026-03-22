@@ -1,9 +1,6 @@
 import { Link } from "@phosphor-icons/react";
 
-interface EmptyListProps {
-}
-
-export const EmptyList = ({}: EmptyListProps) => {
+export const EmptyList = () => {
   return (
     <div className="flex flex-col min-h-50 gap-6 items-center justify-center align-middle text-center">
       <Link size={32}/>
