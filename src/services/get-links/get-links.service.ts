@@ -8,7 +8,7 @@ export type GetLinksResponse = {
   pageSize: number;
 };
 
-export async function getLinks(): Promise<Link[]> {
+export async function getLinksService(): Promise<Link[]> {
   const { data } = await api.get<GetLinksResponse>("/links");
 
   if (!Array.isArray(data.links)) {

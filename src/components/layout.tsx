@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 interface LayoutProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export function Layout({ children }: LayoutProps) {
@@ -10,6 +11,7 @@ export function Layout({ children }: LayoutProps) {
       <div className="container mx-auto max-w-300 px-4 py-8">
         {children}
       </div>
+      <Toaster richColors position="top-right" />
     </main>
-  )
+  );
 }

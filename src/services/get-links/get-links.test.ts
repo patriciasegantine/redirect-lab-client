@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { getLinks } from "./get-links.ts";
+import { getLinksService } from "./get-links.service.ts";
 import { api } from "@/services/api-client.ts";
 
 vi.mock("@/services/api-client.ts", () => ({
@@ -8,7 +8,7 @@ vi.mock("@/services/api-client.ts", () => ({
   },
 }));
 
-describe("getLinks", () => {
+describe("getLinksService", () => {
   const mockedGet = vi.mocked(api.get);
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe("getLinks", () => {
       },
     });
 
-    expect(getLinks()).resolves.toEqual([
+    expect(getLinksService()).resolves.toEqual([
       {
         id: "1",
         originalUrl: "https://example.com",
@@ -48,7 +48,7 @@ describe("getLinks", () => {
   it("propagates API errors", () => {
     mockedGet.mockRejectedValueOnce(new Error("Network error"));
 
-    expect(getLinks()).rejects.toThrow("Network error");
+    expect(getLinksService()).rejects.toThrow("Network error");
   });
 
   it("throws when payload does not contain a get-links array", () => {
@@ -60,6 +60,6 @@ describe("getLinks", () => {
       },
     });
 
-    expect(getLinks()).rejects.toThrow("Invalid get-links response");
+    expect(getLinksService()).rejects.toThrow("Invalid get-links response");
   });
 });
