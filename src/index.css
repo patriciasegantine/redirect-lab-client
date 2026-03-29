@@ -8,7 +8,7 @@
     /* Design System - Blue */
     --blue-base: #2C46B1;
     --blue-dark: #2C4091;
-    --blue-light: #5b72a2;
+    --blue-light: #648be3;
 
     /* Design System - Grayscale */
     --white: #FFFFFF;
@@ -83,7 +83,7 @@
     --primary: var(--blue-light);
     --primary-foreground: var(--white);
 
-    --secondary: var(--gray-500);
+    --secondary: var(--gray-200);
     --secondary-foreground: var(--gray-100);
 
     --muted: var(--gray-500);

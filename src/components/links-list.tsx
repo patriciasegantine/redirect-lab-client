@@ -44,7 +44,7 @@ export const LinksList = ({ links }: LinksListProps) => {
           </div>
 
           <div className="flex items-center gap-2 justify-center">
-            <p className="text-sm text-gray-500 p-0">
+            <p className="text-sm text-gray-500 dark:text-gray-200 p-0">
               {`${link.accessCount} views`}
             </p>
 
