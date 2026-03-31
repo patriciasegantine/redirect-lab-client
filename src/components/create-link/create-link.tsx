@@ -1,9 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { Label } from "@/components/ui/label.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addLink } from "@/services/links-service";
+import { addLink } from "@/services/links-service.ts";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -44,8 +44,13 @@ export function CreateLink() {
         <CardTitle>New Link</CardTitle>
       </CardHeader>
       
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      <CardContent>s
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4"
+          noValidate
+          aria-busy={isPending}
+        >
           <div className="space-y-2">
             <Label htmlFor="original-url">ORIGINAL LINK</Label>
             <Input
@@ -53,10 +58,13 @@ export function CreateLink() {
               type="url"
               placeholder="https://www.example.com"
               aria-invalid={!!errors.originalUrl}
+              aria-describedby={errors.originalUrl ? "original-url-error" : undefined}
               {...register("originalUrl")}
             />
             {errors.originalUrl?.message && (
-              <p className="text-sm text-destructive">{errors.originalUrl.message}</p>
+              <p id="original-url-error" className="text-sm text-destructive">
+                {errors.originalUrl.message}
+              </p>
             )}
           </div>
           
@@ -65,16 +73,23 @@ export function CreateLink() {
             <Input
               id="short-url"
               type="text"
-              placeholder={`brev.ly/meu-link`}
+              placeholder="brev.ly/meu-link"
               aria-invalid={!!errors.shortUrl}
+              aria-describedby={errors.shortUrl ? "short-url-error" : undefined}
               {...register("shortUrl")}
             />
             {errors.shortUrl?.message && (
-              <p className="text-sm text-destructive">{errors.shortUrl.message}</p>
+              <p id="short-url-error" className="text-sm text-destructive">
+                {errors.shortUrl.message}
+              </p>
             )}
           </div>
           
-          {error && <p className="text-sm text-destructive">{error.message}</p>}
+          {error && (
+            <p className="text-sm text-destructive" role="alert">
+              {error.message}
+            </p>
+          )}
           
             <Button type="submit" className="w-full" disabled={isPending}>
               {isPending ? "Saving..." : "Save Link"}

@@ -4,7 +4,7 @@ import { EmptyList } from "@/components/empty-list.tsx";
 import { Download } from "@phosphor-icons/react";
 import { LinksList } from "@/components/links-list.tsx";
 import { useLinks } from "@/hooks/use-links";
-import { LoadingState } from "@/components/loading-state.tsx";
+import { LoadingState } from "@/components/ui/loading-state.tsx";
 
 export function MyLinks() {
   const { links, isLoading, error } = useLinks();
