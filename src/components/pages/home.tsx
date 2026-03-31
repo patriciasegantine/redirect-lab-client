@@ -1,4 +1,4 @@
-import { CreateLink } from "@/components/create-link";
+import { CreateLink } from "@/components/layout/create-link/create-link";
 import { MyLinks } from "@/components/my-links.tsx";
 
 export function Home() {
