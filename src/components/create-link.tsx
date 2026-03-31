@@ -1,52 +1,63 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import * as React from "react";
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components//ui/label";
+import { Label } from "@/components/ui/label";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addLink } from "@/services/links-service";
 import { toast } from "sonner";
-import { getAppHost } from "@/lib/utils/app-url.ts";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createLinkSchema } from "@/schema/create-link.tsx";
+
+type CreateLinkFormData = z.infer<typeof createLinkSchema>;
 
 export function CreateLink() {
-  const [originalUrl, setOriginalUrl] = useState("");
-  const [shortUrl, setShortUrl] = useState("");
   const queryClient = useQueryClient();
   
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CreateLinkFormData>({
+    resolver: zodResolver(createLinkSchema),
+    mode: "onSubmit",
+  });
+  
   const { mutate: handleSubmitCreate, isPending, error } = useMutation({
-    mutationFn: () => addLink({ originalUrl, shortUrl }),
+    mutationFn: addLink,
     onSuccess: () => {
-      setOriginalUrl("");
-      setShortUrl("");
+      reset();
       queryClient.invalidateQueries({ queryKey: ["links"] });
-      toast.success("Link created successfully!");
+      toast.success("Link created successfully.");
     },
   });
   
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleSubmitCreate();
+  const onSubmit = (data: CreateLinkFormData) => {
+    handleSubmitCreate(data);
   };
   
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>New link</CardTitle>
+        <CardTitle>New Link</CardTitle>
       </CardHeader>
       
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
           <div className="space-y-2">
             <Label htmlFor="original-url">ORIGINAL LINK</Label>
             <Input
               id="original-url"
               type="url"
-              placeholder="www.example.com"
-              value={originalUrl}
-              onChange={(e) => setOriginalUrl(e.target.value)}
-              required
+              placeholder="https://www.example.com"
+              aria-invalid={!!errors.originalUrl}
+              {...register("originalUrl")}
             />
+            {errors.originalUrl?.message && (
+              <p className="text-sm text-destructive">{errors.originalUrl.message}</p>
+            )}
           </div>
           
           <div className="space-y-2">
@@ -54,20 +65,20 @@ export function CreateLink() {
             <Input
               id="short-url"
               type="text"
-              placeholder={`${getAppHost()}/`}
-              value={shortUrl}
-              onChange={(e) => setShortUrl(e.target.value)}
-              required
+              placeholder={`brev.ly/meu-link`}
+              aria-invalid={!!errors.shortUrl}
+              {...register("shortUrl")}
             />
+            {errors.shortUrl?.message && (
+              <p className="text-sm text-destructive">{errors.shortUrl.message}</p>
+            )}
           </div>
           
-          {error && (
-            <p className="text-sm text-destructive">{error.message}</p>
-          )}
+          {error && <p className="text-sm text-destructive">{error.message}</p>}
           
-          <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? "Saving..." : "Save link"}
-          </Button>
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? "Saving..." : "Save Link"}
+            </Button>
         </form>
       </CardContent>
     </Card>
