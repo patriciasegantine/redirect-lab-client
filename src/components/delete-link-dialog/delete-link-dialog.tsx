@@ -7,8 +7,8 @@ import {
   AlertDialogFooter,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/alert-dialog.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import { Trash } from "@phosphor-icons/react";
 
 interface DeleteLinkDialogProps {
@@ -18,6 +18,8 @@ interface DeleteLinkDialogProps {
 }
 
 export function DeleteLinkDialog({ shortUrl, onConfirm, isPending }: DeleteLinkDialogProps) {
+  const triggerLabel = `Delete link brev.ly/${shortUrl}`;
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -26,8 +28,10 @@ export function DeleteLinkDialog({ shortUrl, onConfirm, isPending }: DeleteLinkD
           size="sm"
           className="h-8 w-8"
           disabled={isPending}
+          aria-label={triggerLabel}
+          title={triggerLabel}
         >
-          <Trash size={14} className="text-gray-600" />
+          <Trash size={14} className="text-gray-600" aria-hidden="true" />
         </Button>
       </AlertDialogTrigger>
       

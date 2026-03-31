@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import type { Link } from "@/types/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { removeLink } from "@/services/links-service";
-import { DeleteLinkDialog } from "@/components/delete-link-dialog.tsx";
+import { DeleteLinkDialog } from "@/components/delete-link-dialog/delete-link-dialog.tsx";
 
 interface LinksListProps {
   links: Link[];
