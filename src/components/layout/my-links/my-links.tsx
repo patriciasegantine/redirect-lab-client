@@ -1,9 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx"
+import { Button } from "@/components/ui/button.tsx"
 import { EmptyList } from "@/components/empty-list.tsx";
 import { Download } from "@phosphor-icons/react";
-import { LinksList } from "@/components/links-list.tsx";
-import { useLinks } from "@/hooks/use-links";
+import { LinksList } from "@/components/layout/links-list/links-list.tsx";
+import { useLinks } from "@/hooks/use-links.ts";
 import { LoadingState } from "@/components/ui/loading-state.tsx";
 
 export function MyLinks() {
