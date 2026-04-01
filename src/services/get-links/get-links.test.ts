@@ -15,7 +15,7 @@ describe("getLinksService", () => {
     mockedGet.mockReset();
   });
 
-  it("returns get-links when API responds with a valid payload", () => {
+  it("returns get-links when API responds with a valid payload", async () => {
     mockedGet.mockResolvedValueOnce({
       data: {
         links: [
@@ -33,7 +33,7 @@ describe("getLinksService", () => {
       },
     });
 
-    expect(getLinksService()).resolves.toEqual([
+    await expect(getLinksService()).resolves.toEqual([
       {
         id: "1",
         originalUrl: "https://example.com",
@@ -45,13 +45,13 @@ describe("getLinksService", () => {
     expect(mockedGet).toHaveBeenCalledWith("/links");
   });
 
-  it("propagates API errors", () => {
+  it("propagates API errors", async () => {
     mockedGet.mockRejectedValueOnce(new Error("Network error"));
 
-    expect(getLinksService()).rejects.toThrow("Network error");
+    await expect(getLinksService()).rejects.toThrow("Network error");
   });
 
-  it("throws when payload does not contain a get-links array", () => {
+  it("throws when payload does not contain a get-links array", async () => {
     mockedGet.mockResolvedValueOnce({
       data: {
         total: 0,
@@ -60,6 +60,6 @@ describe("getLinksService", () => {
       },
     });
 
-    expect(getLinksService()).rejects.toThrow("Invalid get-links response");
+    await expect(getLinksService()).rejects.toThrow("Invalid get-links response");
   });
 });

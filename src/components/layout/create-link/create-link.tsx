@@ -44,7 +44,7 @@ export function CreateLink() {
         <CardTitle>New Link</CardTitle>
       </CardHeader>
       
-      <CardContent>s
+      <CardContent>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-4"
