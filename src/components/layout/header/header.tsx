@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button.tsx"
 import { Moon, Sun } from "@phosphor-icons/react"
-import { useTheme } from "@/components/theme-provider"
-import { Logo } from "@/components/icon/logo"
+import { useTheme } from "@/components/theme-provider.tsx"
+import { Logo } from "@/components/icon/logo.tsx"
 import { Link } from "react-router-dom"
 
 export function Header() {
@@ -14,7 +14,12 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-gray-200 dark:bg-gray-600">
       <div className="container mx-auto px-4 h-20 flex items-center justify-between max-w-300">
-        <Link to="/" className="flex items-center gap-2 hover:opacity-80 hover:cursor-pointer transition-opacity">
+        <Link
+          to="/"
+          aria-label="Go to home page"
+          title="Go to home page"
+          className="flex items-center gap-2 hover:opacity-80 hover:cursor-pointer transition-opacity"
+        >
           <Logo className="h-8 text-blue-base dark:text-white" />
         </Link>
         
