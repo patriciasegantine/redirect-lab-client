@@ -1,5 +1,5 @@
-import { Header } from "@/components/header"
-import { Layout } from "@/components/layout"
+import { Header } from "@/components/layout/header/header.tsx"
+import { Layout } from "@/components/layout/layout.tsx"
 import { Home } from "@/components/pages/home"
 import { NotFound } from "@/components/pages/not-found"
 import { Redirecting } from "@/components/pages/redirecting"
