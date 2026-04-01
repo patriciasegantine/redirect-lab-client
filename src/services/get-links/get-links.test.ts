@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { getLinks } from "./get-links.ts";
+import { getLinksService } from "./get-links.service.ts";
 import { api } from "@/services/api-client.ts";
 
 vi.mock("@/services/api-client.ts", () => ({
@@ -8,14 +8,14 @@ vi.mock("@/services/api-client.ts", () => ({
   },
 }));
 
-describe("getLinks", () => {
+describe("getLinksService", () => {
   const mockedGet = vi.mocked(api.get);
 
   beforeEach(() => {
     mockedGet.mockReset();
   });
 
-  it("returns get-links when API responds with a valid payload", () => {
+  it("returns get-links when API responds with a valid payload", async () => {
     mockedGet.mockResolvedValueOnce({
       data: {
         links: [
@@ -33,7 +33,7 @@ describe("getLinks", () => {
       },
     });
 
-    expect(getLinks()).resolves.toEqual([
+    await expect(getLinksService()).resolves.toEqual([
       {
         id: "1",
         originalUrl: "https://example.com",
@@ -45,13 +45,13 @@ describe("getLinks", () => {
     expect(mockedGet).toHaveBeenCalledWith("/links");
   });
 
-  it("propagates API errors", () => {
+  it("propagates API errors", async () => {
     mockedGet.mockRejectedValueOnce(new Error("Network error"));
 
-    expect(getLinks()).rejects.toThrow("Network error");
+    await expect(getLinksService()).rejects.toThrow("Network error");
   });
 
-  it("throws when payload does not contain a get-links array", () => {
+  it("throws when payload does not contain a get-links array", async () => {
     mockedGet.mockResolvedValueOnce({
       data: {
         total: 0,
@@ -60,6 +60,6 @@ describe("getLinks", () => {
       },
     });
 
-    expect(getLinks()).rejects.toThrow("Invalid get-links response");
+    await expect(getLinksService()).rejects.toThrow("Invalid get-links response");
   });
 });

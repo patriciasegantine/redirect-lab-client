@@ -15,7 +15,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border bg-gray-200 dark:bg-gray-600">
       <div className="container mx-auto px-4 h-20 flex items-center justify-between max-w-300">
         <Link to="/" className="flex items-center gap-2 hover:opacity-80 hover:cursor-pointer transition-opacity">
-          <Logo className="h-8 text-blue-base dark:text-blue-light" />
+          <Logo className="h-8 text-blue-base dark:text-white" />
         </Link>
         
         <Button
