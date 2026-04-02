@@ -1,0 +1,63 @@
+import { render, screen } from "@testing-library/react";
+import { axe } from "vitest-axe";
+import { describe, expect, it, vi } from "vitest";
+import { MyLinks } from "@/components/layout/my-links/my-links.tsx";
+import type { Link } from "@/types/link.ts";
+
+const useLinksMock = vi.fn();
+
+vi.mock("@/hooks/use-links.ts", () => ({
+  useLinks: () => useLinksMock(),
+}));
+
+vi.mock("@/components/links-list.tsx", () => ({
+  LinksList: ({ links }: { links: Link[] }) => (
+    <ul aria-label="links list">
+      {links.map((link) => (
+        <li key={link.id}>{link.shortUrl}</li>
+      ))}
+    </ul>
+  ),
+}));
+
+describe("MyLinks a11y", () => {
+  it("has no accessibility violations in empty state", async () => {
+    useLinksMock.mockReturnValue({
+      links: [],
+      isLoading: false,
+      error: null,
+    });
+
+    const { container } = render(<MyLinks />);
+
+    expect(screen.getByText(/my links/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /download csv/i })).toBeDisabled();
+
+    const results = await axe(container);
+    expect(results.violations).toHaveLength(0);
+  });
+
+  it("has no accessibility violations when links are present", async () => {
+    useLinksMock.mockReturnValue({
+      links: [
+        {
+          id: "1",
+          originalUrl: "https://example.com",
+          shortUrl: "example",
+          accessCount: 10,
+          createdAt: "2026-04-01T10:00:00.000Z",
+        },
+      ],
+      isLoading: false,
+      error: null,
+    });
+
+    const { container } = render(<MyLinks />);
+
+    expect(screen.getByRole("button", { name: /download csv/i })).toBeEnabled();
+    expect(screen.getByRole("list", { name: /links list/i })).toBeInTheDocument();
+
+    const results = await axe(container);
+    expect(results.violations).toHaveLength(0);
+  });
+});
