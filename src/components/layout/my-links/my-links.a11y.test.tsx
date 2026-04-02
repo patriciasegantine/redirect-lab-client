@@ -10,7 +10,7 @@ vi.mock("@/hooks/use-links.ts", () => ({
   useLinks: () => useLinksMock(),
 }));
 
-vi.mock("@/components/layout/links-list/links-list.tsx", () => ({
+vi.mock("@/components/links-list.tsx", () => ({
   LinksList: ({ links }: { links: Link[] }) => (
     <ul aria-label="links list">
       {links.map((link) => (

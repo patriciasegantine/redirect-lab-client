@@ -10,7 +10,7 @@ vi.mock("@/hooks/use-links.ts", () => ({
   useLinks: () => useLinksMock(),
 }));
 
-vi.mock("@/components/layout/links-list/links-list.tsx", () => ({
+vi.mock("@/components/links-list.tsx", () => ({
   LinksList: ({ links }: { links: Link[] }) =>
     React.createElement("div", { "data-testid": "links-list" }, `Links: ${links.length}`),
 }));
