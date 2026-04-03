@@ -18,7 +18,7 @@ export function Header() {
           to="/"
           aria-label="Go to home page"
           title="Go to home page"
-          className="flex items-center gap-2 hover:opacity-80 hover:cursor-pointer transition-opacity"
+          className="flex items-center gap-2 hover:opacity-80 hover:cursor-pointer transition-opacity rounded-lg outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:focus-visible:ring-ring"
         >
           <Logo className="h-8 text-blue-base dark:text-white" />
         </Link>

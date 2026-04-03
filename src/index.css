@@ -98,7 +98,7 @@
 
     --border: var(--gray-500);
     --input: var(--gray-500);
-    --ring: var(--blue-base);
+    --ring: var(--gray-200);
 
     --sidebar: var(--gray-600);
     --sidebar-foreground: var(--gray-100);

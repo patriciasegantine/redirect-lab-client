@@ -45,8 +45,13 @@ export function DeleteLinkDialog({ shortUrl, onConfirm, isPending }: DeleteLinkD
           ? This action cannot be undone.
         </AlertDialogDescription>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>Delete</AlertDialogAction>
+          <AlertDialogCancel size='sm'>
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction size='sm' onClick={onConfirm}>
+            <Trash/>
+            Delete
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
