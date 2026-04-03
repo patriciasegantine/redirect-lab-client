@@ -27,9 +27,9 @@ export const LinksList = ({ links }: LinksListProps) => {
   };
   
   return (
-    <div className="space-y-3 pt-4">
+    <ul className="space-y-3 pt-4" aria-label="My shortened links">
       {links.map((link) => (
-        <div
+        <li
           key={link.id}
           className="flex items-center gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors"
         >
@@ -37,6 +37,8 @@ export const LinksList = ({ links }: LinksListProps) => {
             <button
               type="button"
               onClick={() => handleOpenRedirect(link.shortUrl)}
+              aria-label={`Open shortened link brev.ly/${link.shortUrl}`}
+              title={`Open shortened link brev.ly/${link.shortUrl}`}
               className="font-semibold text-md text-primary truncate text-left hover:underline"
             >
               {`brev.ly/${link.shortUrl}`}
@@ -56,9 +58,11 @@ export const LinksList = ({ links }: LinksListProps) => {
               variant="secondary"
               size="sm"
               className="h-8 w-8"
+              aria-label={`Copy shortened link brev.ly/${link.shortUrl}`}
+              title={`Copy shortened link brev.ly/${link.shortUrl}`}
               onClick={() => handleCopyShortUrl(link.shortUrl)}
             >
-              <Copy size={20} className="text-gray-600" />
+              <Copy size={20} className="text-gray-600" aria-hidden="true" />
             </Button>
             
             <DeleteLinkDialog
@@ -67,8 +71,8 @@ export const LinksList = ({ links }: LinksListProps) => {
               isPending={isPending}
             />
           </div>
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };

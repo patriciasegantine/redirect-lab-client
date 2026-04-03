@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { MyLinks } from "@/components/layout/my-links/my-links.tsx";
@@ -10,9 +9,10 @@ vi.mock("@/hooks/use-links.ts", () => ({
   useLinks: () => useLinksMock(),
 }));
 
-vi.mock("@/components/links-list.tsx", () => ({
-  LinksList: ({ links }: { links: Link[] }) =>
-    React.createElement("div", { "data-testid": "links-list" }, `Links: ${links.length}`),
+vi.mock("@/components/layout/links-list/links-list.tsx", () => ({
+  LinksList: ({ links }: { links: Link[] }) => (
+    <div data-testid="links-list">Links: {links.length}</div>
+  ),
 }));
 
 const linksFixture: Link[] = [
@@ -37,7 +37,7 @@ describe("MyLinks", () => {
       error: null,
     });
 
-    render(React.createElement(MyLinks));
+    render(<MyLinks />);
 
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
@@ -49,7 +49,7 @@ describe("MyLinks", () => {
       error: "Failed to fetch links",
     });
 
-    render(React.createElement(MyLinks));
+    render(<MyLinks />);
 
     expect(screen.getByText(/failed to fetch links/i)).toBeInTheDocument();
   });
@@ -61,7 +61,7 @@ describe("MyLinks", () => {
       error: null,
     });
 
-    render(React.createElement(MyLinks));
+    render(<MyLinks />);
 
     expect(screen.getByText(/there are no links yet/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /download csv/i })).toBeDisabled();
@@ -74,7 +74,7 @@ describe("MyLinks", () => {
       error: null,
     });
 
-    render(React.createElement(MyLinks));
+    render(<MyLinks />);
 
     expect(screen.getByTestId("links-list")).toHaveTextContent("Links: 1");
     expect(screen.getByRole("button", { name: /download csv/i })).toBeEnabled();

@@ -12,13 +12,13 @@ export function Header() {
   }
   
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-gray-200 dark:bg-gray-600">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-gray-200 dark:bg-gray-600 ">
       <div className="container mx-auto px-4 h-20 flex items-center justify-between max-w-300">
         <Link
           to="/"
           aria-label="Go to home page"
           title="Go to home page"
-          className="flex items-center gap-2 hover:opacity-80 hover:cursor-pointer transition-opacity"
+          className="flex items-center gap-2 hover:opacity-80 hover:cursor-pointer transition-opacity rounded-lg outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:focus-visible:ring-ring"
         >
           <Logo className="h-8 text-blue-base dark:text-white" />
         </Link>
