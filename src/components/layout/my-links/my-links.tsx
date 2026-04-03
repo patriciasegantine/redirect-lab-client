@@ -4,7 +4,7 @@ import { EmptyList } from "@/components/empty-list.tsx";
 import { Download } from "@phosphor-icons/react";
 import { useLinks } from "@/hooks/use-links.ts";
 import { LoadingState } from "@/components/ui/loading-state.tsx";
-import { LinksList } from "@/components/links-list.tsx";
+import { LinksList } from "@/components/layout/links-list/links-list.tsx";
 
 export function MyLinks() {
   const { links, isLoading, error } = useLinks();
@@ -15,7 +15,7 @@ export function MyLinks() {
       <CardHeader className="flex flex-row items-center justify-between border-b">
         <CardTitle>My links</CardTitle>
         <Button
-          variant="outline"
+          variant="secondary"
           size="sm"
           disabled={!hasLinks}
         >
