@@ -5,10 +5,33 @@ import { Download } from "@phosphor-icons/react";
 import { useLinks } from "@/hooks/use-links.ts";
 import { LoadingState } from "@/components/ui/loading-state.tsx";
 import { LinksList } from "@/components/layout/links-list/links-list.tsx";
+import { useMutation } from "@tanstack/react-query";
+import { exportLinksCsv } from "@/services/links-service.ts";
+import { toast } from "sonner";
+import axios from "axios";
 
 export function MyLinks() {
   const { links, isLoading, error } = useLinks();
   const hasLinks = links.length > 0;
+  const { mutate: handleExportCsv, isPending: isExportingCsv } = useMutation({
+    mutationFn: exportLinksCsv,
+    onSuccess: ({ fileUrl }) => {
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.download = "links.csv";
+      link.rel = "noopener noreferrer";
+      document.body.append(link);
+      link.click();
+      link.remove();
+      toast.success("CSV exported successfully.");
+    },
+    onError: (error) => {
+      const message = axios.isAxiosError<{ message?: string }>(error)
+        ? error.response?.data?.message ?? "Failed to export CSV."
+        : "Failed to export CSV.";
+      toast.error(message);
+    },
+  });
   
   return (
     <Card className="w-full">
@@ -17,10 +40,11 @@ export function MyLinks() {
         <Button
           variant="secondary"
           size="sm"
-          disabled={!hasLinks}
+          disabled={!hasLinks || isExportingCsv}
+          onClick={() => handleExportCsv()}
         >
           <Download size={16} className="mr-1"/>
-          Download CSV
+          {isExportingCsv ? "Exporting..." : "Download CSV"}
         </Button>
       </CardHeader>
       
