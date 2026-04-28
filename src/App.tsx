@@ -8,7 +8,7 @@ import { Route, Routes } from "react-router-dom"
 
 export function App() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen bg-background overflow-hidden flex flex-col">
       <Header />
       
       <Layout>

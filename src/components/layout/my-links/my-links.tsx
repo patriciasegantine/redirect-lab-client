@@ -49,7 +49,7 @@ export function MyLinks() {
   });
   
   return (
-    <Card className="w-full max-h-[calc(100vh-218px)] overflow-hidden">
+    <Card className="w-full h-full min-h-0 overflow-hidden flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between border-b shrink-0">
         <CardTitle>My links</CardTitle>
         <Button
@@ -63,7 +63,7 @@ export function MyLinks() {
         </Button>
       </CardHeader>
       
-      <CardContent className="flex-1 overflow-y-auto min-h-0">
+      <CardContent className="flex-1 min-h-0 overflow-y-auto">
         {isLoading ? (
           <LoadingState />
         ) : error ? (
