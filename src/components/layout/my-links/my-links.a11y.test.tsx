@@ -3,6 +3,8 @@ import { axe } from "vitest-axe";
 import { describe, expect, it, vi } from "vitest";
 import { MyLinks } from "@/components/layout/my-links/my-links.tsx";
 import type { Link } from "@/types/link.ts";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { ReactElement } from "react";
 
 const useLinksMock = vi.fn();
 
@@ -21,6 +23,19 @@ vi.mock("@/components/layout/links-list/links-list.tsx", () => ({
 }));
 
 describe("MyLinks a11y", () => {
+  const renderWithQueryClient = (ui: ReactElement) => {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+        mutations: { retry: false },
+      },
+    });
+
+    return render(
+      <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>,
+    );
+  };
+
   it("has no accessibility violations in empty state", async () => {
     useLinksMock.mockReturnValue({
       links: [],
@@ -28,7 +43,7 @@ describe("MyLinks a11y", () => {
       error: null,
     });
 
-    const { container } = render(<MyLinks />);
+    const { container } = renderWithQueryClient(<MyLinks />);
 
     expect(screen.getByText(/my links/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /download csv/i })).toBeDisabled();
@@ -52,7 +67,7 @@ describe("MyLinks a11y", () => {
       error: null,
     });
 
-    const { container } = render(<MyLinks />);
+    const { container } = renderWithQueryClient(<MyLinks />);
 
     expect(screen.getByRole("button", { name: /download csv/i })).toBeEnabled();
     expect(screen.getByRole("list", { name: /links list/i })).toBeInTheDocument();

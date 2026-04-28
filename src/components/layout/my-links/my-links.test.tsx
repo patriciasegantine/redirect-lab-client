@@ -2,6 +2,8 @@ import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { MyLinks } from "@/components/layout/my-links/my-links.tsx";
 import type { Link } from "@/types/link.ts";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { ReactElement } from "react";
 
 const useLinksMock = vi.fn();
 
@@ -26,6 +28,19 @@ const linksFixture: Link[] = [
 ];
 
 describe("MyLinks", () => {
+  const renderWithQueryClient = (ui: ReactElement) => {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+        mutations: { retry: false },
+      },
+    });
+
+    return render(
+      <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>,
+    );
+  };
+
   beforeEach(() => {
     useLinksMock.mockReset();
   });
@@ -37,7 +52,7 @@ describe("MyLinks", () => {
       error: null,
     });
 
-    render(<MyLinks />);
+    renderWithQueryClient(<MyLinks />);
 
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
@@ -49,7 +64,7 @@ describe("MyLinks", () => {
       error: "Failed to fetch links",
     });
 
-    render(<MyLinks />);
+    renderWithQueryClient(<MyLinks />);
 
     expect(screen.getByText(/failed to fetch links/i)).toBeInTheDocument();
   });
@@ -61,7 +76,7 @@ describe("MyLinks", () => {
       error: null,
     });
 
-    render(<MyLinks />);
+    renderWithQueryClient(<MyLinks />);
 
     expect(screen.getByText(/there are no links yet/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /download csv/i })).toBeDisabled();
@@ -74,7 +89,7 @@ describe("MyLinks", () => {
       error: null,
     });
 
-    render(<MyLinks />);
+    renderWithQueryClient(<MyLinks />);
 
     expect(screen.getByTestId("links-list")).toHaveTextContent("Links: 1");
     expect(screen.getByRole("button", { name: /download csv/i })).toBeEnabled();

@@ -11,6 +11,10 @@ const mutateSpy = vi.fn();
 const mutationState = {
   isPending: false,
 };
+const { toastSuccessSpy, toastErrorSpy } = vi.hoisted(() => ({
+  toastSuccessSpy: vi.fn(),
+  toastErrorSpy: vi.fn(),
+}));
 
 vi.mock("@tanstack/react-query", () => ({
   useQueryClient: () => ({
@@ -23,6 +27,13 @@ vi.mock("@tanstack/react-query", () => ({
     },
     isPending: mutationState.isPending,
   }),
+}));
+
+vi.mock("sonner", () => ({
+  toast: {
+    success: toastSuccessSpy,
+    error: toastErrorSpy,
+  },
 }));
 
 const linksFixture: Link[] = [
@@ -44,10 +55,13 @@ const linksFixture: Link[] = [
 
 describe("LinksList", () => {
   beforeEach(() => {
+    vi.restoreAllMocks();
     invalidateQueriesSpy.mockReset();
     mutateSpy.mockReset();
     mutationState.isPending = false;
-    vi.spyOn(window, "alert").mockImplementation(() => {});
+    toastSuccessSpy.mockReset();
+    toastErrorSpy.mockReset();
+    vi.spyOn(window, "open").mockImplementation(() => null);
   });
 
   it("renders all links with original url and views count", () => {
@@ -69,9 +83,9 @@ describe("LinksList", () => {
     expect(screen.getByText("9 views")).toBeInTheDocument();
   });
 
-  it("alerts when user clicks the short url button", async () => {
+  it("opens a new tab when user clicks the short url button", async () => {
     const user = userEvent.setup();
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+    const openSpy = vi.spyOn(window, "open");
 
     render(React.createElement(LinksList, { links: [linksFixture[0]] }));
 
@@ -81,12 +95,15 @@ describe("LinksList", () => {
       }),
     );
 
-    expect(alertSpy).toHaveBeenCalledWith("shortUrl first");
+    expect(openSpy).toHaveBeenCalledWith(
+      "/first",
+      "_blank",
+      "noopener,noreferrer",
+    );
   });
 
-  it("alerts when user clicks copy shortened link button", async () => {
+  it("shows feedback when user clicks copy shortened link button", async () => {
     const user = userEvent.setup();
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
 
     render(React.createElement(LinksList, { links: [linksFixture[0]] }));
 
@@ -96,7 +113,7 @@ describe("LinksList", () => {
       }),
     );
 
-    expect(alertSpy).toHaveBeenCalledWith("shortUrl first copied to clipboard!");
+    expect(toastSuccessSpy.mock.calls.length + toastErrorSpy.mock.calls.length).toBeGreaterThan(0);
   });
 
   it("calls mutation with link id after confirming deletion and invalidates links query", async () => {

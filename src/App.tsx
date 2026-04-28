@@ -14,8 +14,8 @@ export function App() {
       <Layout>
         <Routes>
           <Route path={AppRoutes.HOME} element={<Home />} />
+          <Route path={AppRoutes.NOT_FOUND_PAGE} element={<NotFound />} />
           <Route path={AppRoutes.REDIRECT} element={<Redirecting />} />
-          <Route path={AppRoutes.NOT_FOUND} element={<NotFound />} />
         </Routes>
       </Layout>
     </div>

@@ -1,7 +1,7 @@
 export const AppRoutes = {
   HOME: "/",
+  NOT_FOUND_PAGE: "/not-found",
   REDIRECT: "/:shortUrl",
-  NOT_FOUND: "*",
 } as const;
 
 export type AppRoute = (typeof AppRoutes)[keyof typeof AppRoutes];

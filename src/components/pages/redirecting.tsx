@@ -1,7 +1,38 @@
 import { CardLayout } from "@/components/ui/card-layout"
 import LogoIcon from "@/assets/Logo_Icon.svg"
+import { useEffect, useRef } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import { getLinkByShortUrlService } from "@/services/get-link-by-short-url/get-link-by-short-url.service"
+import { LINKS_CHANNEL_NAME, type LinksChannelMessage } from "@/lib/links-channel"
+import { AppRoutes } from "@/enum/routes"
 
 export function Redirecting() {
+  const { shortUrl } = useParams<{ shortUrl: string }>()
+  const navigate = useNavigate()
+  const hasFetched = useRef(false)
+
+  useEffect(() => {
+    if (hasFetched.current) return
+    hasFetched.current = true
+
+    if (!shortUrl) {
+      navigate(AppRoutes.NOT_FOUND_PAGE, { replace: true })
+      return
+    }
+
+    getLinkByShortUrlService(shortUrl)
+      .then(({ originalUrl }) => {
+        const channel = new BroadcastChannel(LINKS_CHANNEL_NAME)
+        const message: LinksChannelMessage = { type: "link-accessed", shortUrl }
+        channel.postMessage(message)
+        channel.close()
+        window.location.href = originalUrl
+      })
+      .catch(() => {
+        navigate(AppRoutes.NOT_FOUND_PAGE, { replace: true })
+      })
+  }, [shortUrl, navigate])
+
   return (
     <CardLayout>
       <div className="flex flex-col items-center justify-center text-center space-y-6 w-full h-full">

@@ -4,6 +4,7 @@ import type { Link } from "@/types/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { removeLink } from "@/services/links-service";
 import { DeleteLinkDialog } from "@/components/delete-link-dialog/delete-link-dialog.tsx";
+import { toast } from "sonner";
 
 interface LinksListProps {
   links: Link[];
@@ -19,11 +20,20 @@ export const LinksList = ({ links }: LinksListProps) => {
     },
   });
   
-  const handleCopyShortUrl = (shortUrl: string) => {
-    alert(`shortUrl ${shortUrl} copied to clipboard!`)
-  }
+  const handleCopyShortUrl = async (shortUrl: string) => {
+    const frontendUrl =
+      import.meta.env.VITE_FRONTEND_URL ?? window.location.origin;
+    const fullUrl = `${frontendUrl}/${shortUrl}`;
+    try {
+      await navigator.clipboard.writeText(fullUrl);
+      toast.success("Link copied to clipboard!");
+    } catch {
+      toast.error("Failed to copy link.");
+    }
+  };
+
   const handleOpenRedirect = (shortUrl: string) => {
-    alert(`shortUrl ${shortUrl}`)
+    window.open(`/${shortUrl}`, "_blank", "noopener,noreferrer");
   };
   
   return (
@@ -31,7 +41,7 @@ export const LinksList = ({ links }: LinksListProps) => {
       {links.map((link) => (
         <li
           key={link.id}
-          className="flex items-center gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+          className="flex items-center gap-4 p-4 border rounded-lg transition-colors"
         >
           <div className="flex-1 space-y-2 min-w-0">
             <button
@@ -39,7 +49,7 @@ export const LinksList = ({ links }: LinksListProps) => {
               onClick={() => handleOpenRedirect(link.shortUrl)}
               aria-label={`Open shortened link brev.ly/${link.shortUrl}`}
               title={`Open shortened link brev.ly/${link.shortUrl}`}
-              className="font-semibold text-md text-primary truncate text-left hover:underline"
+              className="font-semibold text-md text-primary truncate text-left hover:underline hover:cursor-pointer"
             >
               {`brev.ly/${link.shortUrl}`}
             </button>

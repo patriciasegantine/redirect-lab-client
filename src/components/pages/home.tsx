@@ -5,7 +5,7 @@ export function Home() {
   
   return (
     <div className="space-y-4">
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col lg:flex-row lg:items-start gap-6">
         <div className="w-full lg:w-95 lg:shrink-0">
           <CreateLink />
         </div>
