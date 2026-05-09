@@ -8,12 +8,24 @@ export type GetLinksResponse = {
   pageSize: number;
 };
 
-export async function getLinksService(): Promise<Link[]> {
-  const { data } = await api.get<GetLinksResponse>("/links");
+export type GetLinksInput = {
+  page?: number;
+  pageSize?: number;
+};
+
+export async function getLinksService(
+  input: GetLinksInput = {}
+): Promise<GetLinksResponse> {
+  const { data } = await api.get<GetLinksResponse>("/links", {
+    params: {
+      page: input.page,
+      pageSize: input.pageSize,
+    },
+  });
 
   if (!Array.isArray(data.links)) {
     throw new Error("Invalid get-links response");
   }
 
-  return data.links;
+  return data;
 }

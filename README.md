@@ -38,6 +38,19 @@ The application allows users to:
 - Handling of loading and empty states
 - Accessible and reusable components
 - Integration with the back-end API
+- Accessible placeholder styling for improved UX
+
+---
+
+## 🚀 Deploy
+
+The client is automatically deployed to **AWS S3** on every push to the `main` branch via GitHub Actions.  
+After upload, a **CloudFront cache invalidation** is triggered to ensure the latest version is served immediately.
+
+The pipeline runs in order:
+1. **Test** — runs the test suite
+2. **Build** — compiles the production bundle
+3. **Deploy** — syncs to S3 and invalidates CloudFront
 
 ---
 
@@ -60,7 +73,6 @@ Create a `.env` file based on the required variables.
 VITE_FRONTEND_URL=
 VITE_BACKEND_URL=
 ```
-
 ---
 
 ## 📦  Getting started
@@ -75,6 +87,28 @@ VITE_BACKEND_URL=
 - [Root README](../README.md)
 - [Server README](../server/README.md)
 
-## 📸 Preview
+## ✅ Checklist
 
-<!-- add screenshot or gif here -->
+- [x] A link can be created
+    - [x] A link with a badly formatted short URL must not be created
+    - [x] A link with a duplicate short URL must not be created
+- [x] A link can be deleted
+- [x] The original URL can be retrieved via the short URL
+- [x] All registered URLs can be listed
+- [x] The access count of a link can be incremented
+- [x] A CSV report of all links can be downloaded
+- [x] React SPA built with Vite as the bundler
+- [x] Good user experience elements (empty state, loading indicators, action blocking based on app state)
+- [x] Responsive design: works well on both desktop and mobile
+
+### ⭐ Extras
+
+- [x] Infinite scroll with `IntersectionObserver` for paginated link loading
+- [x] BroadcastChannel for real-time access count sync across browser tabs
+- [x] Copy short link to clipboard
+- [x] Confirmation dialog before deleting a link
+- [x] Dark mode support
+- [x] Automated CI/CD — deploy to AWS S3 + CloudFront via GitHub Actions
+- [x] Automated tests (services and accessibility)
+
+---
