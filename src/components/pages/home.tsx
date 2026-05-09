@@ -23,7 +23,7 @@ export function Home() {
   }, []);
 
   return (
-    <div className="h-full min-h-0 space-y-4">11
+    <div className="h-full min-h-0 space-y-4">
       <div className="h-full min-h-0 flex flex-col lg:flex-row lg:items-stretch gap-6">
         <div ref={createLinkContainerRef} className="w-full lg:w-95 lg:shrink-0">
           <CreateLink />

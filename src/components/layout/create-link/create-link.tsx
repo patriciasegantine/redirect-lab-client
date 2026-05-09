@@ -57,6 +57,7 @@ export function CreateLink() {
               id="original-url"
               type="url"
               placeholder="https://www.example.com"
+              className="placeholder:text-muted-foreground/40"
               aria-invalid={!!errors.originalUrl}
               aria-describedby={errors.originalUrl ? "original-url-error" : undefined}
               {...register("originalUrl")}
@@ -74,6 +75,7 @@ export function CreateLink() {
               id="short-url"
               type="text"
               placeholder="brev.ly/meu-link"
+              className="placeholder:text-muted-foreground/40"
               aria-invalid={!!errors.shortUrl}
               aria-describedby={errors.shortUrl ? "short-url-error" : undefined}
               {...register("shortUrl")}
