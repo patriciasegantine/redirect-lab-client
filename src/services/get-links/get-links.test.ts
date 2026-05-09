@@ -33,16 +33,23 @@ describe("getLinksService", () => {
       },
     });
 
-    await expect(getLinksService()).resolves.toEqual([
-      {
-        id: "1",
-        originalUrl: "https://example.com",
-        shortUrl: "abc123",
-        accessCount: 10,
-        createdAt: "2026-03-19T00:00:00.000Z",
-      },
-    ]);
-    expect(mockedGet).toHaveBeenCalledWith("/links");
+    await expect(getLinksService()).resolves.toEqual({
+      links: [
+        {
+          id: "1",
+          originalUrl: "https://example.com",
+          shortUrl: "abc123",
+          accessCount: 10,
+          createdAt: "2026-03-19T00:00:00.000Z",
+        },
+      ],
+      total: 1,
+      page: 1,
+      pageSize: 10,
+    });
+    expect(mockedGet).toHaveBeenCalledWith("/links", {
+      params: { page: undefined, pageSize: undefined },
+    });
   });
 
   it("propagates API errors", async () => {
@@ -56,7 +63,7 @@ describe("getLinksService", () => {
       data: {
         total: 0,
         page: 1,
-        pageSize: 20,
+        pageSize: 10,
       },
     });
 

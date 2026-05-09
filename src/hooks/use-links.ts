@@ -1,22 +1,43 @@
 import { fetchLinks } from "@/services/links-service";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
+
+const LINKS_PAGE_SIZE = 10;
 
 export function useLinks() {
-  const query = useQuery({
+  const query = useInfiniteQuery({
     queryKey: ["links"],
-    queryFn: fetchLinks,
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) =>
+      fetchLinks({ page: pageParam, pageSize: LINKS_PAGE_SIZE }),
+    getNextPageParam: (lastPage, allPages) => {
+      const loadedLinksCount = allPages.reduce(
+        (total, page) => total + page.links.length,
+        0
+      );
+
+      if (loadedLinksCount >= lastPage.total || lastPage.links.length === 0) {
+        return undefined;
+      }
+
+      return lastPage.page + 1;
+    },
   });
-  
+
+  const links = query.data?.pages.flatMap((page) => page.links) ?? [];
+
   return {
-    links: query.data ?? [],
+    links,
     isLoading: query.isLoading,
     isError: query.isError,
+    hasNextPage: query.hasNextPage,
+    isFetchingNextPage: query.isFetchingNextPage,
+    fetchNextPage: query.fetchNextPage,
     error:
       query.error instanceof Error
         ? query.error.message
         : query.error
           ? "Failed to fetch links"
           : null,
-    reloadLinks: query.refetch,
+    reloadLinks: query.refetch
   };
 }

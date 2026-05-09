@@ -9,13 +9,18 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { exportLinksCsv } from "@/services/links-service.ts";
 import { toast } from "sonner";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { LINKS_CHANNEL_NAME, type LinksChannelMessage } from "@/lib/links-channel";
 
-export function MyLinks() {
+interface MyLinksProps {
+  minHeight?: number;
+}
+
+export function MyLinks({ minHeight }: MyLinksProps) {
   const queryClient = useQueryClient();
-  const { links, isLoading, error } = useLinks();
+  const { links, isLoading, error, hasNextPage, isFetchingNextPage, fetchNextPage } = useLinks();
   const hasLinks = links.length > 0;
+  const loadMoreTriggerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const channel = new BroadcastChannel(LINKS_CHANNEL_NAME);
@@ -28,6 +33,25 @@ export function MyLinks() {
 
     return () => channel.close();
   }, [queryClient]);
+
+  useEffect(() => {
+    const trigger = loadMoreTriggerRef.current;
+    if (!trigger || !hasNextPage || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry?.isIntersecting && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { rootMargin: "120px" }
+    );
+
+    observer.observe(trigger);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
   const { mutate: handleExportCsv, isPending: isExportingCsv } = useMutation({
     mutationFn: exportLinksCsv,
     onSuccess: ({ fileUrl }) => {
@@ -49,7 +73,10 @@ export function MyLinks() {
   });
   
   return (
-    <Card className="w-full h-full min-h-0 overflow-hidden flex flex-col">
+    <Card
+      className="w-full h-[calc(100vh-14rem)] overflow-hidden flex flex-col"
+      style={minHeight ? { minHeight: `${minHeight}px` } : undefined}
+    >
       <CardHeader className="flex flex-row items-center justify-between border-b shrink-0">
         <CardTitle>My links</CardTitle>
         <Button
@@ -71,7 +98,13 @@ export function MyLinks() {
         ) : !hasLinks ? (
           <EmptyList />
         ) : (
-          <LinksList links={links} />
+          <>
+            <LinksList links={links} />
+            {isFetchingNextPage && (
+              <LoadingState message="Loading more links..." />
+            )}
+            <div ref={loadMoreTriggerRef} className="h-1" aria-hidden="true" />
+          </>
         )}
       </CardContent>
     </Card>
