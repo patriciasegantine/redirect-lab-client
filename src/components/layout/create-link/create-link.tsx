@@ -39,7 +39,7 @@ export function CreateLink() {
   };
   
   return (
-    <Card className="w-full h-[22rem]">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>New Link</CardTitle>
       </CardHeader>
