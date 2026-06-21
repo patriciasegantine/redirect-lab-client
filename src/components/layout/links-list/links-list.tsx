@@ -15,10 +15,14 @@ export const LinksList = ({ links }: LinksListProps) => {
   
   const baseUrl = import.meta.env.VITE_FRONTEND_URL ?? window.location.origin;
 
-  const { mutate: handleDelete, isPending } = useMutation({
+  const { mutate: handleDelete, isPending, variables: deletingId } = useMutation({
     mutationFn: (id: string) => removeLink(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["links"] });
+      toast.success("Link deleted successfully.");
+    },
+    onError: () => {
+      toast.error("Failed to delete link.");
     },
   });
 
@@ -78,7 +82,7 @@ export const LinksList = ({ links }: LinksListProps) => {
             <DeleteLinkDialog
               shortUrl={link.shortUrl}
               onConfirm={() => handleDelete(link.id)}
-              isPending={isPending}
+              isPending={isPending && deletingId === link.id}
             />
           </div>
         </li>
