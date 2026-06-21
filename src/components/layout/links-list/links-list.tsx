@@ -13,17 +13,17 @@ interface LinksListProps {
 export const LinksList = ({ links }: LinksListProps) => {
   const queryClient = useQueryClient();
   
+  const baseUrl = import.meta.env.VITE_FRONTEND_URL ?? window.location.origin;
+
   const { mutate: handleDelete, isPending } = useMutation({
     mutationFn: (id: string) => removeLink(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["links"] });
     },
   });
-  
+
   const handleCopyShortUrl = async (shortUrl: string) => {
-    const frontendUrl =
-      import.meta.env.VITE_FRONTEND_URL ?? window.location.origin;
-    const fullUrl = `${frontendUrl}/${shortUrl}`;
+    const fullUrl = `${baseUrl}/${shortUrl}`;
     try {
       await navigator.clipboard.writeText(fullUrl);
       toast.success("Link copied to clipboard!");
@@ -47,11 +47,11 @@ export const LinksList = ({ links }: LinksListProps) => {
             <button
               type="button"
               onClick={() => handleOpenRedirect(link.shortUrl)}
-              aria-label={`Open shortened link brev.ly/${link.shortUrl}`}
-              title={`Open shortened link brev.ly/${link.shortUrl}`}
+              aria-label={`Open shortened link ${baseUrl}/${link.shortUrl}`}
+              title={`Open shortened link ${baseUrl}/${link.shortUrl}`}
               className="font-semibold text-md text-primary truncate text-left hover:underline hover:cursor-pointer"
             >
-              {`brev.ly/${link.shortUrl}`}
+              {`${baseUrl}/${link.shortUrl}`}
             </button>
             
             <p className="text-sm text-muted-foreground truncate">
@@ -68,8 +68,8 @@ export const LinksList = ({ links }: LinksListProps) => {
               variant="secondary"
               size="sm"
               className="h-8 w-8"
-              aria-label={`Copy shortened link brev.ly/${link.shortUrl}`}
-              title={`Copy shortened link brev.ly/${link.shortUrl}`}
+              aria-label={`Copy shortened link ${baseUrl}/${link.shortUrl}`}
+              title={`Copy shortened link ${baseUrl}/${link.shortUrl}`}
               onClick={() => handleCopyShortUrl(link.shortUrl)}
             >
               <Copy size={20} className="text-gray-600" aria-hidden="true" />

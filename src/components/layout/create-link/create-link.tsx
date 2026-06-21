@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createLinkSchema } from "@/schema/create-link.tsx";
+import { createLinkSchema } from "@/schema/create-link";
 
 type CreateLinkFormData = z.infer<typeof createLinkSchema>;
 
@@ -74,12 +74,15 @@ export function CreateLink() {
             <Input
               id="short-url"
               type="text"
-              placeholder="brev.ly/meu-link"
+              placeholder="my-link"
               className="placeholder:text-muted-foreground/40"
               aria-invalid={!!errors.shortUrl}
-              aria-describedby={errors.shortUrl ? "short-url-error" : undefined}
+              aria-describedby="short-url-hint short-url-error"
               {...register("shortUrl")}
             />
+            <p id="short-url-hint" className="text-xs text-muted-foreground">
+              Will be accessible at: {import.meta.env.VITE_FRONTEND_URL ?? window.location.origin}/<span className="font-medium">your-slug</span>
+            </p>
             {errors.shortUrl?.message && (
               <p id="short-url-error" className="text-sm text-destructive">
                 {errors.shortUrl.message}

@@ -39,7 +39,7 @@ export function Redirecting() {
         <div className="w-12 h-12 flex items-center justify-center">
           <img
             src={LogoIcon}
-            alt="Brev.ly Icon"
+            alt="Redirect Lab Icon"
             className="w-full h-full animate-logo-pulse"
           />
         </div>

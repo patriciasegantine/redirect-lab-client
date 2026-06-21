@@ -18,7 +18,8 @@ interface DeleteLinkDialogProps {
 }
 
 export function DeleteLinkDialog({ shortUrl, onConfirm, isPending }: DeleteLinkDialogProps) {
-  const triggerLabel = `Delete link brev.ly/${shortUrl}`;
+  const baseUrl = import.meta.env.VITE_FRONTEND_URL ?? window.location.origin;
+  const triggerLabel = `Delete link ${baseUrl}/${shortUrl}`;
 
   return (
     <AlertDialog>
@@ -40,7 +41,7 @@ export function DeleteLinkDialog({ shortUrl, onConfirm, isPending }: DeleteLinkD
         <AlertDialogDescription>
           Are you sure you want to delete{" "}
           <span className="font-medium text-foreground">
-            brev.ly/{shortUrl}
+            {baseUrl}/{shortUrl}
           </span>
           ? This action cannot be undone.
         </AlertDialogDescription>
