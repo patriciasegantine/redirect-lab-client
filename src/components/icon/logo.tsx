@@ -20,7 +20,9 @@ export function Logo({ className }: LogoProps) {
           fill="currentColor"
         />
       </svg>
-      <span className="text-lg font-semibold tracking-tight">Redirect Lab</span>
+      <span className="text-lg font-extrabold tracking-[-0.04em] text-foreground">
+        Redirect Lab
+      </span>
     </div>
   )
 }
