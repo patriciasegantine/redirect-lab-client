@@ -24,7 +24,7 @@ export function Home() {
 
   return (
     <div className="min-h-full space-y-7 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:gap-7 lg:space-y-0">
-      <header className="space-y-3">
+      <header className="desktop-compact-hidden space-y-3">
         <h1 className="text-3xl font-extrabold tracking-[-0.05em] text-foreground sm:text-4xl">
           Shorten the distance.
         </h1>

@@ -72,7 +72,7 @@ export function CreateLink() {
               id="original-url"
               rows={3}
               placeholder="https://www.example.com"
-              className="font-mono placeholder:text-muted-foreground/40"
+              className="max-h-40 font-mono placeholder:text-muted-foreground/40"
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}

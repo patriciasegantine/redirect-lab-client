@@ -87,7 +87,7 @@ export function MyLinks({ minHeight }: MyLinksProps) {
 
   return (
     <Card
-      className="flex h-auto min-h-0 w-full flex-col overflow-hidden lg:h-[calc(100vh-19rem)] lg:min-h-[var(--create-link-height)]"
+      className="desktop-compact-panel flex h-auto min-h-0 w-full flex-col overflow-hidden lg:h-fit lg:max-h-[calc(100vh-19rem)] lg:min-h-[var(--create-link-height)]"
       style={
         minHeight
           ? ({ "--create-link-height": `${minHeight}px` } as CSSProperties)
@@ -115,7 +115,7 @@ export function MyLinks({ minHeight }: MyLinksProps) {
 
       <CardContent
         ref={listViewportRef}
-        className="min-h-0 flex-1 overflow-y-auto"
+        className="route-scrollbar min-h-0 flex-1 overflow-y-auto pr-2"
       >
         {isLoading ? (
           <LoadingState />
@@ -124,7 +124,7 @@ export function MyLinks({ minHeight }: MyLinksProps) {
         ) : !hasLinks ? (
           <EmptyList />
         ) : (
-          <LinksList links={links} />
+          <LinksList links={links} startIndex={(currentPage - 1) * pageSize} />
         )}
       </CardContent>
 

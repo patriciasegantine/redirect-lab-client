@@ -96,6 +96,17 @@ describe("LinksList", () => {
     expect(screen.getByText("1 view")).toBeInTheDocument()
   })
 
+  it("continues route numbering across paginated pages", () => {
+    render(
+      React.createElement(LinksList, {
+        links: [linksFixture[0]],
+        startIndex: 10,
+      })
+    )
+
+    expect(screen.getByText("11")).toBeInTheDocument()
+  })
+
   it("opens a new tab when user clicks the short url button", async () => {
     const user = userEvent.setup()
     const openSpy = vi.spyOn(window, "open")
