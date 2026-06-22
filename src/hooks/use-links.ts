@@ -1,43 +1,29 @@
-import { fetchLinks } from "@/services/links-service";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { fetchLinks } from "@/services/links-service"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 
-const LINKS_PAGE_SIZE = 10;
+const LINKS_PAGE_SIZE = 10
 
-export function useLinks() {
-  const query = useInfiniteQuery({
-    queryKey: ["links"],
-    initialPageParam: 1,
-    queryFn: ({ pageParam }) =>
-      fetchLinks({ page: pageParam, pageSize: LINKS_PAGE_SIZE }),
-    getNextPageParam: (lastPage, allPages) => {
-      const loadedLinksCount = allPages.reduce(
-        (total, page) => total + page.links.length,
-        0
-      );
-
-      if (loadedLinksCount >= lastPage.total || lastPage.links.length === 0) {
-        return undefined;
-      }
-
-      return lastPage.page + 1;
-    },
-  });
-
-  const links = query.data?.pages.flatMap((page) => page.links) ?? [];
+export function useLinks(page = 1) {
+  const query = useQuery({
+    queryKey: ["links", page],
+    queryFn: () => fetchLinks({ page, pageSize: LINKS_PAGE_SIZE }),
+    placeholderData: keepPreviousData,
+  })
 
   return {
-    links,
+    links: query.data?.links ?? [],
+    total: query.data?.total ?? 0,
+    page: query.data?.page ?? page,
+    pageSize: query.data?.pageSize ?? LINKS_PAGE_SIZE,
     isLoading: query.isLoading,
+    isFetching: query.isFetching,
     isError: query.isError,
-    hasNextPage: query.hasNextPage,
-    isFetchingNextPage: query.isFetchingNextPage,
-    fetchNextPage: query.fetchNextPage,
     error:
       query.error instanceof Error
         ? query.error.message
         : query.error
           ? "Failed to fetch links"
           : null,
-    reloadLinks: query.refetch
-  };
+    reloadLinks: query.refetch,
+  }
 }
