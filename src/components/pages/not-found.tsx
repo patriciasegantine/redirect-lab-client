@@ -23,7 +23,7 @@ export function NotFound() {
             href="/"
             className="text-blue-base hover:underline hover:cursor-pointer font-medium"
           >
-            brev.ly
+            Redirect Lab
           </a>
           .
         </p>

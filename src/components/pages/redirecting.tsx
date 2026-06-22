@@ -20,8 +20,13 @@ export function Redirecting() {
       return
     }
 
+    const timeout = setTimeout(() => {
+      navigate(AppRoutes.NOT_FOUND_PAGE, { replace: true })
+    }, 10000)
+
     getLinkByShortUrlService(shortUrl)
       .then(({ originalUrl }) => {
+        clearTimeout(timeout)
         const channel = new BroadcastChannel(LINKS_CHANNEL_NAME)
         const message: LinksChannelMessage = { type: "link-accessed", shortUrl }
         channel.postMessage(message)
@@ -29,8 +34,11 @@ export function Redirecting() {
         window.location.href = originalUrl
       })
       .catch(() => {
+        clearTimeout(timeout)
         navigate(AppRoutes.NOT_FOUND_PAGE, { replace: true })
       })
+
+    return () => clearTimeout(timeout)
   }, [shortUrl, navigate])
 
   return (
@@ -39,7 +47,7 @@ export function Redirecting() {
         <div className="w-12 h-12 flex items-center justify-center">
           <img
             src={LogoIcon}
-            alt="Brev.ly Icon"
+            alt="Redirect Lab Icon"
             className="w-full h-full animate-logo-pulse"
           />
         </div>

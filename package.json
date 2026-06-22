@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "redirect-lab-client",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -24,7 +24,6 @@
     "axios": "^1.13.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.577.0",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.4.3",
     "react": "^19.2.0",
@@ -63,5 +62,10 @@
     "vite": "^7.2.4",
     "vitest": "^4.0.5",
     "vitest-axe": "^0.1.0"
+  },
+  "allowScripts": {
+    "esbuild@0.27.4": true,
+    "fsevents@2.3.3": true,
+    "msw@2.12.11": true
   }
 }

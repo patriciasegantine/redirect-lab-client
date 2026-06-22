@@ -1,3 +1,4 @@
+@import "@fontsource-variable/geist";
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -111,7 +112,7 @@
 }
 
 @theme inline {
-    --font-sans: 'Open Sans Variable', sans-serif;
+    --font-sans: 'Geist Variable', sans-serif;
     --text-xs: 0.625rem;
     --text-sm: 0.750rem;
     --text-md: 0.875rem;

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://brev.ly/sitemap.xml
+Sitemap: https://ps-redirect-lab.vercel.app/sitemap.xml

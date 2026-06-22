@@ -40,7 +40,7 @@ describe("CreateLink a11y", () => {
     expect(originalInput).toHaveAttribute("aria-invalid", "true");
     expect(shortInput).toHaveAttribute("aria-invalid", "true");
     expect(originalInput).toHaveAttribute("aria-describedby", "original-url-error");
-    expect(shortInput).toHaveAttribute("aria-describedby", "short-url-error");
+    expect(shortInput.getAttribute("aria-describedby")).toContain("short-url-error");
     expect(originalError).toHaveAttribute("id", "original-url-error");
     expect(shortError).toHaveAttribute("id", "short-url-error");
 

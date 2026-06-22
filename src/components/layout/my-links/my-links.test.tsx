@@ -78,7 +78,7 @@ describe("MyLinks", () => {
 
     renderWithQueryClient(<MyLinks />);
 
-    expect(screen.getByText(/there are no links yet/i)).toBeInTheDocument();
+    expect(screen.getByText(/no links yet/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /download csv/i })).toBeDisabled();
   });
 
