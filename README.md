@@ -9,7 +9,7 @@ Redirect Lab is a full-stack URL shortener built around a simple idea: link mana
 
 The application communicates with the standalone Redirect Lab API and keeps the interface in sync when a short link is accessed in another browser tab.
 
-[Live application](https://redirect-lab.vercel.app/) -
+[Live application](https://ps-redirect-lab.vercel.app/) -
 [Client repository](https://github.com/patriciasegantine/redirect-lab-client) -
 [Server repository](https://github.com/patriciasegantine/redirect-lab-server)
 
