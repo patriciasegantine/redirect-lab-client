@@ -77,7 +77,7 @@ export function CreateLink() {
               placeholder="my-link"
               className="placeholder:text-muted-foreground/40"
               aria-invalid={!!errors.shortUrl}
-              aria-describedby="short-url-hint short-url-error"
+              aria-describedby={errors.shortUrl ? "short-url-hint short-url-error" : "short-url-hint"}
               {...register("shortUrl")}
             />
             <p id="short-url-hint" className="text-xs text-muted-foreground">

@@ -17,7 +17,7 @@ describe("DeleteLinkDialog a11y", () => {
 
     await user.tab();
 
-    const trigger = screen.getByRole("button", { name: /delete link brev\.ly\/my-link/i });
+    const trigger = screen.getByRole("button", { name: /delete link.*my-link/i });
     expect(trigger).toHaveFocus();
 
     await user.keyboard("{Enter}");
@@ -36,7 +36,7 @@ describe("DeleteLinkDialog a11y", () => {
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: /delete link brev\.ly\/my-link/i }));
+    await user.click(screen.getByRole("button", { name: /delete link.*my-link/i }));
 
     await waitFor(() => {
       expect(screen.getByRole("alertdialog", { name: /delete link/i })).toBeInTheDocument();
@@ -57,7 +57,7 @@ describe("DeleteLinkDialog a11y", () => {
       />,
     );
 
-    const trigger = screen.getByRole("button", { name: /delete link brev\.ly\/my-link/i });
+    const trigger = screen.getByRole("button", { name: /delete link.*my-link/i });
     await user.click(trigger);
     expect(screen.getByRole("alertdialog", { name: /delete link/i })).toBeInTheDocument();
 

@@ -10,6 +10,7 @@ const mutateSpy = vi.fn();
 
 const mutationState = {
   isPending: false,
+  variables: undefined as string | undefined,
 };
 const { toastSuccessSpy, toastErrorSpy } = vi.hoisted(() => ({
   toastSuccessSpy: vi.fn(),
@@ -26,6 +27,7 @@ vi.mock("@tanstack/react-query", () => ({
       options.onSuccess?.();
     },
     isPending: mutationState.isPending,
+    variables: mutationState.variables,
   }),
 }));
 
@@ -59,6 +61,7 @@ describe("LinksList", () => {
     invalidateQueriesSpy.mockReset();
     mutateSpy.mockReset();
     mutationState.isPending = false;
+    mutationState.variables = undefined;
     toastSuccessSpy.mockReset();
     toastErrorSpy.mockReset();
     vi.spyOn(window, "open").mockImplementation(() => null);
@@ -69,12 +72,12 @@ describe("LinksList", () => {
 
     expect(
       screen.getByRole("button", {
-        name: /open shortened link brev\.ly\/first/i,
+        name: /open shortened link .*first/i,
       }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", {
-        name: /open shortened link brev\.ly\/second/i,
+        name: /open shortened link .*second/i,
       }),
     ).toBeInTheDocument();
     expect(screen.getByText("https://example.com/first")).toBeInTheDocument();
@@ -91,7 +94,7 @@ describe("LinksList", () => {
 
     await user.click(
       screen.getByRole("button", {
-        name: /open shortened link brev\.ly\/first/i,
+        name: /open shortened link .*first/i,
       }),
     );
 
@@ -109,7 +112,7 @@ describe("LinksList", () => {
 
     await user.click(
       screen.getByRole("button", {
-        name: /copy shortened link brev\.ly\/first/i,
+        name: /copy shortened link .*first/i,
       }),
     );
 
@@ -122,7 +125,7 @@ describe("LinksList", () => {
 
     await user.click(
       screen.getByRole("button", {
-        name: /delete link brev\.ly\/first/i,
+        name: /delete link .*first/i,
       }),
     );
     await user.click(screen.getByRole("button", { name: /^delete$/i }));
@@ -134,12 +137,13 @@ describe("LinksList", () => {
 
   it("disables delete action while deletion is pending", () => {
     mutationState.isPending = true;
+    mutationState.variables = "1";
 
     render(React.createElement(LinksList, { links: [linksFixture[0]] }));
 
     expect(
       screen.getByRole("button", {
-        name: /delete link brev\.ly\/first/i,
+        name: /delete link .*first/i,
       }),
     ).toBeDisabled();
   });

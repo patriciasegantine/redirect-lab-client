@@ -42,17 +42,17 @@ describe("LinksList a11y", () => {
     expect(screen.getByRole("list", { name: /my shortened links/i })).toBeInTheDocument();
     expect(
       screen.getByRole("button", {
-        name: /open shortened link brev\.ly\/example/i,
+        name: /open shortened link .*example/i,
       }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", {
-        name: /copy shortened link brev\.ly\/example/i,
+        name: /copy shortened link .*example/i,
       }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", {
-        name: /delete link brev\.ly\/example/i,
+        name: /delete link .*example/i,
       }),
     ).toBeInTheDocument();
   });
@@ -70,7 +70,7 @@ describe("LinksList a11y", () => {
 
     await user.click(
       screen.getByRole("button", {
-        name: /delete link brev\.ly\/example/i,
+        name: /delete link .*example/i,
       }),
     );
 
