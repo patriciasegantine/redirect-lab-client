@@ -10,7 +10,6 @@ Redirect Lab is a full-stack URL shortener built around a simple idea: link mana
 The application communicates with the standalone Redirect Lab API and keeps the interface in sync when a short link is accessed in another browser tab.
 
 [Live application](https://ps-redirect-lab.vercel.app/) -
-[Client repository](https://github.com/patriciasegantine/redirect-lab-client) -
 [Server repository](https://github.com/patriciasegantine/redirect-lab-server)
 
 ### What you can do
@@ -22,6 +21,14 @@ The application communicates with the standalone Redirect Lab API and keeps the 
 - Export the complete link collection as CSV
 - Switch between light and dark themes
 - Navigate with accessible labels, dialogs, focus states, and form feedback
+
+## Background
+
+Redirect Lab started as [Brev.ly](https://github.com/patriciasegantine/brev.ly), developed during a postgraduate course to explore full-stack development and AWS. After the course ended, the original monorepo became the foundation for a broader personal project: the application was rebranded, the client and server were split into independent repositories, and new features were layered on top.
+
+The infrastructure choices shifted deliberately toward low-cost or free-tier services: Neon for serverless PostgreSQL, Railway for server deployment, Cloudflare R2 for object storage, and Vercel for the client. This makes the project practical to run and iterate on outside of a classroom or enterprise environment.
+
+This repository contains the React client. The backend, API contracts, persistence layer, and CSV export pipeline live in the [Redirect Lab server repository](https://github.com/patriciasegantine/redirect-lab-server).
 
 ## How it works
 
@@ -101,16 +108,20 @@ VITE_BACKEND_URL=http://localhost:3333
 
 ## Delivery and quality
 
-Pull requests run automated tests, type-checking, and linting through GitHub Actions. Changes merged into `main` go through the production workflow and are deployed to Vercel after the test suite passes.
+Pull requests run automated tests, type-checking, and linting through GitHub Actions. Vercel's Git integration creates preview deployments for branches and deploys changes merged into `main` to production.
 
 The component suite includes behavioral and accessibility tests, with Testing Library and axe-core covering the user-facing flows rather than implementation details.
 
+## What's next
 
-## From monorepo to independent services
+- **Access dashboard**: charts showing clicks over time, with last-access date per link
+- **QR Code generation**: client-side QR Code per link with PNG download
+- **Link expiration**: optional expiry date on creation, with a distinct expired state in the UI
+- **UTM builder**: optional UTM fields on the creation form with a live URL preview
 
- Redirect Lab originally lived in a monorepo, with the client and server maintained side by side. As the project evolved, both applications were moved into independent repositories so each one could have its own release cycle, CI pipeline, deployment configuration, and technical documentation.
+## License
 
- This repository contains the React client. The backend, API contracts, persistence layer, and CSV export pipeline live in the [Redirect Lab server repository](https://github.com/patriciasegantine/redirect-lab-server).
+This project is licensed under the [MIT License](LICENSE).
 
 ## Author
 
