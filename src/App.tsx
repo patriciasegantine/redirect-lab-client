@@ -8,9 +8,9 @@ import { Route, Routes } from "react-router-dom"
 
 export function App() {
   return (
-    <div className="h-screen bg-background overflow-x-hidden overflow-y-auto flex flex-col">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-background lg:h-screen lg:overflow-hidden">
       <Header />
-      
+
       <Layout>
         <Routes>
           <Route path={AppRoutes.HOME} element={<Home />} />

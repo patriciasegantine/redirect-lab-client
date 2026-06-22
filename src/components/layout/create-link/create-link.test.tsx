@@ -1,21 +1,21 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { CreateLink } from "@/components/layout/create-link/create-link.tsx";
+import { render, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import { beforeEach, describe, expect, it, vi } from "vitest"
+import { CreateLink } from "@/components/layout/create-link/create-link.tsx"
 
 const mutationState = {
   isPending: false,
   error: null as Error | null,
-};
+}
 
-const mutateSpy = vi.fn();
-const invalidateQueriesSpy = vi.fn();
+const mutateSpy = vi.fn()
+const invalidateQueriesSpy = vi.fn()
 
 vi.mock("sonner", () => ({
   toast: {
     success: vi.fn(),
   },
-}));
+}))
 
 vi.mock("@tanstack/react-query", () => ({
   useQueryClient: () => ({
@@ -26,84 +26,93 @@ vi.mock("@tanstack/react-query", () => ({
     isPending: mutationState.isPending,
     error: mutationState.error,
   }),
-}));
+}))
 
 describe("CreateLink", () => {
   beforeEach(() => {
-    mutateSpy.mockReset();
-    invalidateQueriesSpy.mockReset();
-    mutationState.isPending = false;
-    mutationState.error = null;
-  });
+    mutateSpy.mockReset()
+    invalidateQueriesSpy.mockReset()
+    mutationState.isPending = false
+    mutationState.error = null
+  })
 
   it("submits valid form data", async () => {
-    const user = userEvent.setup();
-    render(<CreateLink />);
+    const user = userEvent.setup()
+    render(<CreateLink />)
 
     await user.type(
       screen.getByRole("textbox", { name: /original link/i }),
-      "https://example.com",
-    );
+      "https://example.com"
+    )
     await user.type(
       screen.getByRole("textbox", { name: /short link/i }),
-      "my-link",
-    );
+      "my-link"
+    )
 
-    await user.click(screen.getByRole("button", { name: /save link/i }));
+    await user.click(screen.getByRole("button", { name: /save link/i }))
 
-    expect(mutateSpy).toHaveBeenCalledTimes(1);
+    expect(mutateSpy).toHaveBeenCalledTimes(1)
     expect(mutateSpy).toHaveBeenCalledWith({
       originalUrl: "https://example.com",
       shortUrl: "my-link",
-    });
-  });
+    })
+  })
+
+  it("uses a three-line textarea so long URLs can be reviewed", () => {
+    render(<CreateLink />)
+
+    const originalUrl = screen.getByRole("textbox", {
+      name: /original link/i,
+    })
+
+    expect(originalUrl.tagName).toBe("TEXTAREA")
+    expect(originalUrl).toHaveAttribute("rows", "3")
+    expect(originalUrl).toHaveAttribute("spellcheck", "false")
+  })
 
   it("shows error when original url is invalid", async () => {
-    const user = userEvent.setup();
-    render(<CreateLink />);
+    const user = userEvent.setup()
+    render(<CreateLink />)
 
     await user.type(
       screen.getByRole("textbox", { name: /original link/i }),
-      "invalid-url",
-    );
+      "invalid-url"
+    )
     await user.type(
       screen.getByRole("textbox", { name: /short link/i }),
-      "my-link",
-    );
-    await user.click(screen.getByRole("button", { name: /save link/i }));
+      "my-link"
+    )
+    await user.click(screen.getByRole("button", { name: /save link/i }))
 
     expect(
-      await screen.findByText(/please enter a valid url/i),
-    ).toBeInTheDocument();
-    expect(mutateSpy).not.toHaveBeenCalled();
-  });
+      await screen.findByText(/please enter a valid url/i)
+    ).toBeInTheDocument()
+    expect(mutateSpy).not.toHaveBeenCalled()
+  })
 
   it("shows error when short url is invalid", async () => {
-    const user = userEvent.setup();
-    render(<CreateLink />);
+    const user = userEvent.setup()
+    render(<CreateLink />)
 
     await user.type(
       screen.getByRole("textbox", { name: /original link/i }),
-      "https://example.com",
-    );
-    await user.type(
-      screen.getByRole("textbox", { name: /short link/i }),
-      "ab",
-    );
-    await user.click(screen.getByRole("button", { name: /save link/i }));
+      "https://example.com"
+    )
+    await user.type(screen.getByRole("textbox", { name: /short link/i }), "ab")
+    await user.click(screen.getByRole("button", { name: /save link/i }))
 
     expect(
-      await screen.findByText(/at least 3 characters long/i),
-    ).toBeInTheDocument();
-    expect(mutateSpy).not.toHaveBeenCalled();
-  });
+      await screen.findByText(/at least 3 characters long/i)
+    ).toBeInTheDocument()
+    expect(mutateSpy).not.toHaveBeenCalled()
+  })
 
   it("shows loading state while mutation is pending", () => {
-    mutationState.isPending = true;
-    const { container } = render(<CreateLink />);
+    mutationState.isPending = true
+    const { container } = render(<CreateLink />)
 
-    const saveButton = screen.getByRole("button", { name: /saving/i });
-    expect(saveButton).toBeDisabled();
-    expect(container.querySelector("form")).toHaveAttribute("aria-busy", "true");
-  });
-});
+    const saveButton = screen.getByRole("button", { name: /saving/i })
+    expect(saveButton).toBeDisabled()
+    expect(container.querySelector("form")).toHaveAttribute("aria-busy", "true")
+  })
+})
