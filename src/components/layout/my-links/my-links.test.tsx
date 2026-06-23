@@ -7,9 +7,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import type { ReactElement } from "react"
 
 const useLinksMock = vi.fn()
+const useMediaQueryMock = vi.fn(() => false)
 
 vi.mock("@/hooks/use-links.ts", () => ({
-  useLinks: (page?: number) => useLinksMock(page),
+  useLinks: (page?: number, mode?: string) => useLinksMock(page, mode),
+}))
+
+vi.mock("@/hooks/use-media-query.ts", () => ({
+  useMediaQuery: () => useMediaQueryMock(),
 }))
 
 vi.mock("@/components/layout/links-list/links-list.tsx", () => ({
@@ -44,6 +49,7 @@ describe("MyLinks", () => {
 
   beforeEach(() => {
     useLinksMock.mockReset()
+    useMediaQueryMock.mockReturnValue(false)
   })
 
   it("shows loading state while links are loading", () => {
@@ -118,8 +124,35 @@ describe("MyLinks", () => {
     expect(screen.getByText(/page 1 of 3/i)).toBeInTheDocument()
     await user.click(screen.getByRole("button", { name: /next/i }))
 
-    expect(useLinksMock).toHaveBeenLastCalledWith(2)
+    expect(useLinksMock).toHaveBeenLastCalledWith(2, "paginated")
     expect(screen.getByText(/page 2 of 3/i)).toBeInTheDocument()
     expect(screen.getByText(/11–20 of 21 routes/i)).toBeInTheDocument()
+  })
+
+  it("uses infinite loading instead of pagination on mobile", async () => {
+    const user = userEvent.setup()
+    const fetchNextPage = vi.fn()
+    useMediaQueryMock.mockReturnValue(true)
+    useLinksMock.mockReturnValue({
+      links: linksFixture,
+      isLoading: false,
+      error: null,
+      total: 21,
+      pageSize: 10,
+      isFetching: false,
+      isFetchingNextPage: false,
+      hasNextPage: true,
+      fetchNextPage,
+    })
+
+    renderWithQueryClient(<MyLinks />)
+
+    expect(useLinksMock).toHaveBeenCalledWith(1, "infinite")
+    expect(
+      screen.queryByRole("navigation", { name: /pagination/i })
+    ).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole("button", { name: /load more/i }))
+    expect(fetchNextPage).toHaveBeenCalledTimes(1)
   })
 })
