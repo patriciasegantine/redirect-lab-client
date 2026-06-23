@@ -49,7 +49,7 @@ export function CreateLink() {
   }
 
   return (
-    <Card className="relative w-full overflow-hidden border-l-4 border-l-primary">
+    <Card className="relative w-full overflow-hidden border-l-border/80 lg:border-l-4 lg:border-l-primary">
       <CardHeader>
         <p className="mb-2 font-mono text-xs font-semibold tracking-[0.16em] text-primary uppercase">
           01 / Origin
@@ -99,21 +99,9 @@ export function CreateLink() {
               placeholder="my-link"
               className="placeholder:text-muted-foreground/40"
               aria-invalid={!!errors.shortUrl}
-              aria-describedby={
-                errors.shortUrl
-                  ? "short-url-hint short-url-error"
-                  : "short-url-hint"
-              }
+              aria-describedby={errors.shortUrl ? "short-url-error" : undefined}
               {...register("shortUrl")}
             />
-            <p
-              id="short-url-hint"
-              className="font-mono text-xs leading-relaxed break-all text-muted-foreground"
-            >
-              Route:{" "}
-              {import.meta.env.VITE_FRONTEND_URL ?? window.location.origin}/
-              <span className="font-semibold text-foreground">your-slug</span>
-            </p>
             {errors.shortUrl?.message && (
               <p id="short-url-error" className="text-sm text-destructive">
                 {errors.shortUrl.message}

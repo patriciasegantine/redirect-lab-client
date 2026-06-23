@@ -19,6 +19,7 @@ import {
   LINKS_CHANNEL_NAME,
   type LinksChannelMessage,
 } from "@/lib/links-channel"
+import { useMediaQuery } from "@/hooks/use-media-query.ts"
 
 interface MyLinksProps {
   minHeight?: number
@@ -27,6 +28,7 @@ interface MyLinksProps {
 export function MyLinks({ minHeight }: MyLinksProps) {
   const queryClient = useQueryClient()
   const [currentPage, setCurrentPage] = useState(1)
+  const isMobile = useMediaQuery("(max-width: 39.9375rem)")
   const {
     links,
     isLoading,
@@ -34,9 +36,13 @@ export function MyLinks({ minHeight }: MyLinksProps) {
     total = links.length,
     pageSize = 10,
     isFetching = false,
-  } = useLinks(currentPage)
+    isFetchingNextPage = false,
+    hasNextPage = false,
+    fetchNextPage,
+  } = useLinks(currentPage, isMobile ? "infinite" : "paginated")
   const hasLinks = links.length > 0
   const listViewportRef = useRef<HTMLDivElement | null>(null)
+  const loadMoreTriggerRef = useRef<HTMLDivElement | null>(null)
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
   const rangeStart = total === 0 ? 0 : (currentPage - 1) * pageSize + 1
   const rangeEnd = Math.min(currentPage * pageSize, total)
@@ -58,6 +64,29 @@ export function MyLinks({ minHeight }: MyLinksProps) {
       setCurrentPage((page) => page - 1)
     }
   }, [currentPage, isLoading, links.length, total])
+
+  useEffect(() => {
+    const trigger = loadMoreTriggerRef.current
+    if (
+      !isMobile ||
+      !trigger ||
+      !hasNextPage ||
+      typeof IntersectionObserver === "undefined"
+    )
+      return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting && !isFetchingNextPage) {
+          fetchNextPage()
+        }
+      },
+      { rootMargin: "160px" }
+    )
+
+    observer.observe(trigger)
+    return () => observer.disconnect()
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, isMobile])
 
   const goToPage = (page: number) => {
     setCurrentPage(page)
@@ -124,11 +153,31 @@ export function MyLinks({ minHeight }: MyLinksProps) {
         ) : !hasLinks ? (
           <EmptyList />
         ) : (
-          <LinksList links={links} startIndex={(currentPage - 1) * pageSize} />
+          <>
+            <LinksList
+              links={links}
+              startIndex={isMobile ? 0 : (currentPage - 1) * pageSize}
+            />
+            {isMobile && hasNextPage && (
+              <div
+                ref={loadMoreTriggerRef}
+                className="flex justify-center py-4"
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={isFetchingNextPage}
+                  onClick={() => fetchNextPage()}
+                >
+                  {isFetchingNextPage ? "Loading..." : "Load more"}
+                </Button>
+              </div>
+            )}
+          </>
         )}
       </CardContent>
 
-      {hasLinks && (
+      {hasLinks && !isMobile && (
         <nav
           className="flex shrink-0 flex-col gap-3 border-t border-border/80 pt-3 sm:flex-row sm:items-center sm:justify-between sm:pt-4"
           aria-label="Links pagination"

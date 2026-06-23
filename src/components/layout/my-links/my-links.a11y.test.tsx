@@ -1,16 +1,20 @@
-import { render, screen } from "@testing-library/react";
-import { axe } from "vitest-axe";
-import { describe, expect, it, vi } from "vitest";
-import { MyLinks } from "@/components/layout/my-links/my-links.tsx";
-import type { Link } from "@/types/link.ts";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { ReactElement } from "react";
+import { render, screen } from "@testing-library/react"
+import { axe } from "vitest-axe"
+import { describe, expect, it, vi } from "vitest"
+import { MyLinks } from "@/components/layout/my-links/my-links.tsx"
+import type { Link } from "@/types/link.ts"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import type { ReactElement } from "react"
 
-const useLinksMock = vi.fn();
+const useLinksMock = vi.fn()
 
 vi.mock("@/hooks/use-links.ts", () => ({
   useLinks: () => useLinksMock(),
-}));
+}))
+
+vi.mock("@/hooks/use-media-query.ts", () => ({
+  useMediaQuery: () => false,
+}))
 
 vi.mock("@/components/layout/links-list/links-list.tsx", () => ({
   LinksList: ({ links }: { links: Link[] }) => (
@@ -20,7 +24,7 @@ vi.mock("@/components/layout/links-list/links-list.tsx", () => ({
       ))}
     </ul>
   ),
-}));
+}))
 
 describe("MyLinks a11y", () => {
   const renderWithQueryClient = (ui: ReactElement) => {
@@ -29,28 +33,28 @@ describe("MyLinks a11y", () => {
         queries: { retry: false },
         mutations: { retry: false },
       },
-    });
+    })
 
     return render(
-      <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>,
-    );
-  };
+      <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
+    )
+  }
 
   it("has no accessibility violations in empty state", async () => {
     useLinksMock.mockReturnValue({
       links: [],
       isLoading: false,
       error: null,
-    });
+    })
 
-    const { container } = renderWithQueryClient(<MyLinks />);
+    const { container } = renderWithQueryClient(<MyLinks />)
 
-    expect(screen.getByText(/my links/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /download csv/i })).toBeDisabled();
+    expect(screen.getByText(/my links/i)).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /download csv/i })).toBeDisabled()
 
-    const results = await axe(container);
-    expect(results.violations).toHaveLength(0);
-  });
+    const results = await axe(container)
+    expect(results.violations).toHaveLength(0)
+  })
 
   it("has no accessibility violations when links are present", async () => {
     useLinksMock.mockReturnValue({
@@ -65,14 +69,16 @@ describe("MyLinks a11y", () => {
       ],
       isLoading: false,
       error: null,
-    });
+    })
 
-    const { container } = renderWithQueryClient(<MyLinks />);
+    const { container } = renderWithQueryClient(<MyLinks />)
 
-    expect(screen.getByRole("button", { name: /download csv/i })).toBeEnabled();
-    expect(screen.getByRole("list", { name: /links list/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /download csv/i })).toBeEnabled()
+    expect(
+      screen.getByRole("list", { name: /links list/i })
+    ).toBeInTheDocument()
 
-    const results = await axe(container);
-    expect(results.violations).toHaveLength(0);
-  });
-});
+    const results = await axe(container)
+    expect(results.violations).toHaveLength(0)
+  })
+})
