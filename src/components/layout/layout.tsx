@@ -1,7 +1,9 @@
 import type { ReactNode } from "react"
+import { Link } from "react-router-dom"
 import { Toaster } from "@/components/ui/sonner.tsx"
 import { APP_CONTAINER_CLASS } from "@/lib/layout.ts"
 import { cn } from "@/lib/utils/cn.ts"
+import { AppRoutes } from "@/enum/routes"
 
 interface LayoutProps {
   children: ReactNode
@@ -64,6 +66,12 @@ export function Layout({ children }: LayoutProps) {
             >
               API Docs
             </a>
+            <Link
+              to={AppRoutes.ABOUT}
+              className="transition-colors hover:text-primary focus-visible:rounded-sm focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-none"
+            >
+              About
+            </Link>
           </nav>
         </div>
       </footer>
