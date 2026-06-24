@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx"
+import { EditLinkDialog } from "@/components/edit-link-dialog/edit-link-dialog.tsx"
 
 interface LinksListProps {
   links: Link[]
@@ -60,17 +61,17 @@ export const LinksList = ({ links, startIndex = 0 }: LinksListProps) => {
             className="group grid grid-cols-[2rem_minmax(0,1fr)] gap-3 pt-5 pb-3 transition-colors first:pt-4 sm:grid-cols-[2.5rem_minmax(0,1fr)_auto] sm:gap-8"
           >
             <div
-              className="relative flex items-start justify-center self-stretch"
+              className="relative row-span-2 flex items-start justify-center self-stretch sm:row-span-1"
               aria-hidden="true"
             >
-              <span className="grid size-8 place-items-center rounded-full border border-primary/30 bg-accent font-mono text-xs font-bold text-accent-foreground">
+              <span className="relative z-10 grid size-8 place-items-center rounded-full border border-primary/30 bg-accent font-mono text-xs font-bold text-accent-foreground">
                 {String(startIndex + index + 1).padStart(2, "0")}
               </span>
               <span className="absolute top-10 -bottom-2 left-1/2 w-px -translate-x-1/2 bg-gradient-to-b from-primary/50 to-transparent group-last:hidden" />
             </div>
 
-            <div className="min-w-0 space-y-2">
-              <div className="flex min-w-0 items-baseline gap-3">
+            <div className="flex min-h-8 min-w-0 items-center sm:block sm:min-h-0 sm:space-y-2">
+              <div className="hidden min-w-0 items-baseline gap-3 sm:flex">
                 <span className="shrink-0 font-mono text-[0.625rem] font-semibold tracking-[0.16em] text-muted-foreground uppercase">
                   Destination
                 </span>
@@ -87,7 +88,7 @@ export const LinksList = ({ links, startIndex = 0 }: LinksListProps) => {
                 </Tooltip>
               </div>
 
-              <div className="flex min-w-0 items-center gap-2">
+              <div className="flex min-w-0 items-center gap-2 overflow-hidden">
                 <ArrowBendDownRight
                   className="shrink-0 text-primary"
                   size={16}
@@ -99,9 +100,14 @@ export const LinksList = ({ links, startIndex = 0 }: LinksListProps) => {
                   onClick={() => handleOpenRedirect(link.shortUrl)}
                   aria-label={`Open shortened link ${baseUrl}/${link.shortUrl}`}
                   title={`Open shortened link ${baseUrl}/${link.shortUrl}`}
-                  className="truncate text-left font-mono text-sm font-semibold text-foreground underline decoration-primary/40 decoration-2 underline-offset-4 transition-colors hover:cursor-pointer hover:text-primary hover:decoration-primary"
+                  className="min-w-0 flex-1 overflow-hidden text-left font-mono text-sm font-semibold text-foreground transition-colors hover:cursor-pointer hover:text-primary"
                 >
-                  {`${baseUrl}/${link.shortUrl}`}
+                  <span className="block truncate underline decoration-primary/40 decoration-2 underline-offset-4 hover:decoration-primary sm:hidden">
+                    /{link.shortUrl}
+                  </span>
+                  <span className="hidden truncate underline decoration-primary/40 decoration-2 underline-offset-4 hover:decoration-primary sm:block">
+                    {`${baseUrl}/${link.shortUrl}`}
+                  </span>
                 </button>
               </div>
             </div>
@@ -121,6 +127,8 @@ export const LinksList = ({ links, startIndex = 0 }: LinksListProps) => {
               >
                 <Copy size={16} weight="bold" aria-hidden="true" />
               </Button>
+
+              <EditLinkDialog link={link} />
 
               <DeleteLinkDialog
                 shortUrl={link.shortUrl}
